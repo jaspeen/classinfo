@@ -41,7 +41,7 @@ public class DefaultConverter extends ConverterManager {
         registerDefaults();
     }
     private DefaultConverter() {
-        fallback = new DefaultFallback<>(this);
+        fallback = new DefaultFallback(this);
         registerDefaults();
         readOnly = true;
     }

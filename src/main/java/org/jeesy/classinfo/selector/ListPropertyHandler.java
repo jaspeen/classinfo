@@ -21,8 +21,8 @@ import java.util.List;
 /**
  * @author Artem Mironov
  */
-public class ListPropertyHandler<PropType> extends PropertyHandle<PropType, List> {
+public class ListPropertyHandler<PropType> extends PropertyHandle<List, PropType> {
     protected ListPropertyHandler(Class<PropType> propType, int index, List container) {
-        super(null, container);
+        super(null, container, null);
     }
 }

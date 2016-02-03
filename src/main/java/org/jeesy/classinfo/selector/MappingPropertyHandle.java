@@ -20,12 +20,12 @@ import java.util.Map;
 /**
  * @author Artem Mironov
  */
-public class MappingPropertyHandle<PropType> extends PropertyHandle<PropType, Map> {
+public class MappingPropertyHandle<PropType> extends PropertyHandle<Map, PropType> {
     private String key;
     private Class<PropType> propType;
 
     MappingPropertyHandle(String key, Class<PropType> propType, Map dict) {
-        super(null, dict);
+        super(null, dict, null);
         this.key = key;
         this.propType = propType;
     }

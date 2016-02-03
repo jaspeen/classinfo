@@ -18,7 +18,7 @@ package org.jeesy.classinfo.converter.api;
 import org.jeesy.classinfo.TypeInfo;
 
 /**
- * From/to string converter
+ * Facade for string conversion.
  */
 public interface StringConverter {
     /**
@@ -39,14 +39,4 @@ public interface StringConverter {
      */
     <T> String toString(TypeInfo<T> type, final T value) throws ConversionException;
 
-    /**
-     * Abstract converter which requires to implement only {@link #fromString(TypeInfo, String)}
-     * since {@link #toString(TypeInfo, Object)} implemented via {@link String#valueOf(Object)}
-     */
-    abstract class FromStringConverter implements StringConverter {
-        @Override
-        public <T> String toString(TypeInfo<T> type, T value) throws ConversionException {
-            return String.valueOf(value);
-        }
-    }
 }

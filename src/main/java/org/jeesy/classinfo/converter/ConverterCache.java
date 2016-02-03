@@ -37,11 +37,11 @@ public class ConverterCache {
             try {
                 Constructor<T> constructor = null;
                 try {
-                    constructor = converterClass.getConstructor();
-                    c = constructor.newInstance();
-                } catch (NoSuchMethodException e) {
                     constructor = converterClass.getConstructor(ConversionService.class);
                     c = constructor.newInstance(holder);
+                } catch (NoSuchMethodException e) {
+                    constructor = converterClass.getConstructor();
+                    c = constructor.newInstance();
                 }
                 converters.put(converterClass, c);
             } catch(InvocationTargetException e) {
@@ -53,5 +53,7 @@ public class ConverterCache {
         return c;
     }
 
-
+    public void add(Converter<?, ?> converter) {
+        converters.put(converter.getClass(), converter);
+    }
 }

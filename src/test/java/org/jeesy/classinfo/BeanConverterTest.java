@@ -78,7 +78,7 @@ public class BeanConverterTest {
         beanA.setField1("field1Value");
         beanA.setField2("146");
         beanA.setField3(42);
-        BeanB beanB = (BeanB) defaultConverter().lookupConverter(BeanConverter.class).convert(beanA, (TypeInfo)forClass(BeanA.class), (TypeInfo)forClass(BeanB.class));
+        BeanB beanB = (BeanB) defaultConverter().converterByType(BeanConverter.class).convert(beanA, (TypeInfo)forClass(BeanA.class), (TypeInfo)forClass(BeanB.class));
         assertNotNull(beanB);
         assertEquals(null, beanB.getFieldUnknown());
         assertEquals((Integer)146, beanB.getField2());

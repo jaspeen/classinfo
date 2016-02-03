@@ -21,7 +21,7 @@ import org.jeesy.classinfo.TypeInfo;
  * Converter what able to convert multiple types depending on parameters
  * @author Artem Mironov
  */
-public interface ConversionService {
+public interface ConversionService extends Converter<Object, Object> {
     /**
      * Convert source value of specified type to value of destination type
      * @param src source value
@@ -40,5 +40,13 @@ public interface ConversionService {
      * @param <O>type of the destination what converter supports
      * @return cached or new converter instance or null
      */
-    <I, O, T extends Converter<I, O>> T lookupConverter(Class<T> converterType);
+    <I, O, T extends Converter<I, O>> T converterByType(Class<T> converterType);
+
+    /**
+     * Lookup exact converter for the specified raw types.
+     * @param srcType source type
+     * @param dstType destination type
+     * @return converter what can converter values of source type to destination type
+     */
+    <SrcType, DstType> Converter<SrcType, DstType> converterFor(Class<SrcType> srcType, Class<DstType> dstType);
 }

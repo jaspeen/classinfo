@@ -26,7 +26,7 @@ import java.lang.reflect.Constructor;
 /**
  * @author Artem Mironov
  */
-public class DefaultFallback<SrcType, DstType> implements Converter<SrcType, DstType>, ConversionService {
+public class DefaultFallback implements ConversionService {
 
     private ConversionService conversionService;
 
@@ -35,12 +35,12 @@ public class DefaultFallback<SrcType, DstType> implements Converter<SrcType, Dst
     }
 
     @Override
-    public DstType convert(SrcType src, TypeInfo<SrcType> srcType, TypeInfo<DstType> dstType) throws ConversionException {
-        Class<DstType> rawType = dstType.getRawType();
-        if (srcType.getRawType().equals(rawType)) return (DstType) src;
+    public Object convert(Object src, TypeInfo<Object> srcType, TypeInfo<Object> dstType) throws ConversionException {
+        Class<Object> rawType = dstType.getRawType();
+        if (srcType.getRawType().equals(rawType)) return src;
         //src is a string
 
-        DstType res = null;
+        Object res = null;
         if(CharSequence.class.isAssignableFrom(srcType.getRawType())) {
             String val;
             if(String.class.equals(srcType.getRawType()))
@@ -51,11 +51,11 @@ public class DefaultFallback<SrcType, DstType> implements Converter<SrcType, Dst
         }
         if(res == null){
             if(rawType.equals(String.class)) {
-                return (DstType) src.toString();
+                return src.toString();
             }
             //try constructor with 1 argument and dstType
             try {
-                Constructor<DstType> constructor = rawType.getConstructor(srcType.getRawType());
+                Constructor<Object> constructor = rawType.getConstructor(srcType.getRawType());
                 boolean accesible = constructor.isAccessible();
                 constructor.setAccessible(true);
                 res = constructor.newInstance(src);
@@ -68,19 +68,19 @@ public class DefaultFallback<SrcType, DstType> implements Converter<SrcType, Dst
     }
 
     @SuppressWarnings("unchecked")
-    private DstType fromString(String src, TypeInfo<DstType> type) {
-        Class<DstType> rawType = type.getRawType();
+    private Object fromString(String src, TypeInfo<Object> type) {
+        Class rawType = type.getRawType();
         if(rawType.isEnum()) {
             try {
-                return (DstType) Enum.valueOf((Class<? extends Enum>) rawType, src);
+                return Enum.valueOf((Class<? extends Enum>) rawType, src);
             } catch(IllegalArgumentException e) {
                 throw new ConversionException(src, TypeInfo.forClass(String.class), type, e);
             }
         } else if(rawType.isArray()) {
             if(rawType.getComponentType().equals(String.class))
-                return (DstType) CollectionConverter.parseCollection(src);
+                return CollectionConverter.parseCollection(src);
             else {
-                return (DstType) fillArray(rawType.getComponentType(), CollectionConverter.parseCollection(src));
+                return fillArray(rawType.getComponentType(), CollectionConverter.parseCollection(src));
 
             }
         }
@@ -102,9 +102,14 @@ public class DefaultFallback<SrcType, DstType> implements Converter<SrcType, Dst
     }
 
     @Override
-    public <I, O, T extends Converter<I, O>> T lookupConverter(Class<T> converterType) {
+    public <I, O, T extends Converter<I, O>> T converterByType(Class<T> converterType) {
         //actually return nothing because this is not capable of cache any converter
         return null;
+    }
+
+    @Override
+    public <SrcType, DstType> Converter<SrcType, DstType> converterFor(Class<SrcType> srcType, Class<DstType> dstType) {
+        return conversionService.converterFor(srcType, dstType);
     }
 
     public static DefaultFallback newInstance(ConversionService conversionService) {

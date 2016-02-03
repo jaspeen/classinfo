@@ -22,31 +22,38 @@ import org.jeesy.classinfo.PropertyInfo;
 import java.util.*;
 
 /**
+ * All methods what returns selector returns a new instance
  * @author Artem Mironov
  */
 public class PropertySelector {
     private List<String> path;
     private boolean createIfNull = false;
     private InstantiationBehaviour instantiationBehaviour = new ClassInfoScanner.DefaultInstantiationBehaviour();
-    private Object bean;
 
-    protected PropertySelector(Object bean) {
-        this.bean = bean;
+    protected PropertySelector(List<String> path) {
+        this.path = path;
         instantiationBehaviour = new ClassInfoScanner.DefaultInstantiationBehaviour();
     }
 
-    public PropertySelector withPath(String ... path) {
-        this.path = Arrays.asList(path);
-        return this;
+    /**
+     * Return new selector by relative path starting from current
+     * @param path relative path
+     */
+    public PropertySelector nested(String path) {
+        PropertySelector nested =  new PropertySelector(this.path);
+        nested.path.addAll(Arrays.asList(path.split("\\.")));
+        nested.createIfNull = createIfNull;
+        nested.instantiationBehaviour = instantiationBehaviour;
+        return nested;
     }
 
-    public PropertySelector createIfNull() {
-        this.createIfNull = true;
+    public PropertySelector createNullElements() {
+        createIfNull = true;
         instantiationBehaviour = new ClassInfoScanner.DefaultInstantiationBehaviour();
         return this;
     }
 
-    public PropertySelector createIfNull(InstantiationBehaviour instantiationBehaviour) {
+    public PropertySelector createNullElements(InstantiationBehaviour instantiationBehaviour) {
         createIfNull = true;
         this.instantiationBehaviour = instantiationBehaviour;
         return this;
@@ -73,26 +80,22 @@ public class PropertySelector {
 
     }
 
-    public PropertyHandle select(ClassInfo classInfo) {
+    public PropertyHandle resolve(Object bean) {
         if(path == null) path = Collections.emptyList();
         if(path.isEmpty()) {return null;};
-
+        ClassInfo classInfo = ClassInfoScanner.classInfo(bean.getClass());
         String pathElm = path.get(0);
         PropertyInfo pi = classInfo.getPropertyInfo(pathElm);
-        if(pi == null) return null;
-        PropertyHandle propertyHandle = new PropertyHandle(pi, bean);
-        for(int i = 1; i<path.size(); i++) {
-            pathElm = path.get(i);
-            propertyHandle = onProperty(pathElm, propertyHandle);
-            if(propertyHandle == null)
-                return null;
-        }
-
-        return propertyHandle;
+        if(pi == null) throw new RuntimeException("Property "+pathElm+" is null on path");
+        PropertyHandle propertyHandle = new PropertyHandle(pi, bean, createIfNull ? instantiationBehaviour : null);
+        return propertyHandle.select(path.subList(1, path.size()));
     }
 
-    public static PropertySelector on(Object obj) {
-        return new PropertySelector(obj);
+    public static PropertySelector parse(String path) {
+        return new PropertySelector(new ArrayList<>(Arrays.asList(path.split("\\."))));
     }
 
+    public InstantiationBehaviour getInstantiationBehaviour() {
+        return instantiationBehaviour;
+    }
 }

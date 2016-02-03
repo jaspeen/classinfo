@@ -67,6 +67,10 @@ public class ConverterManager extends ChainableConversionService implements Conv
         converters.put(new ConverterKey<>(dstType, srcType), converter.getReverse());
     }
 
+    @Override
+    public <SrcType, DstType> void register(Converter<SrcType, DstType> converter) {
+        byClassCache.add(converter);
+    }
 
 
     @SuppressWarnings("unchecked")
@@ -118,7 +122,7 @@ public class ConverterManager extends ChainableConversionService implements Conv
      * @return new or cached converter instance
      */
     @Override
-    public <I, O, T extends Converter<I, O>> T lookupConverter(final Class<T> converterClass) {
+    public <I, O, T extends Converter<I, O>> T converterByType(final Class<T> converterClass) {
         T converterInstance = byClassCache.getConverter(this, converterClass);
         return converterInstance;
     }

@@ -19,14 +19,7 @@ package org.jeesy.classinfo.converter.api;
  * @author Artem Mironov
  */
 public interface ConverterRegistry {
-    /**
-     * Lookup exact converter for the specified raw types.
-     * @param srcType source type
-     * @param dstType destination type
-     * @return converter what can converter values of source type to destination type
-     */
-    <SrcType, DstType> Converter<SrcType, DstType> converterFor(Class<SrcType> srcType, Class<DstType> dstType);
-
     <SrcType, DstType> void register(Class<SrcType> srcType, Class<DstType> dstType, Converter<SrcType, DstType> converter);
     <SrcType, DstType> void register(Class<SrcType> srcType, Class<DstType> dstType, TwoWayConverter<SrcType, DstType> converter);
+    <SrcType, DstType> void register(Converter<SrcType, DstType> converter);
 }

@@ -283,9 +283,9 @@ public class ClassInfo<ClassType> implements AnnotatedNode {
      * @param pathSelector selector to find the property
      * @return property handle
      */
-    public PropertyHandle selectProperty(PropertySelector pathSelector) {
-        return pathSelector.select(this);
-    }
+    //public PropertyHandle selectProperty(PropertySelector pathSelector) {
+    //    return pathSelector.resolve(this);
+    //}
 
     /**
      * Select property metadata by simple path.

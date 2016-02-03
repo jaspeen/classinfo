@@ -20,7 +20,7 @@ import org.jeesy.classinfo.converter.api.ConversionService;
 /**
  * @author Artem Mironov
  */
-public abstract class ChainableConversionService implements ConversionService {
+public abstract class ChainableConversionService {
     protected ConversionService fallback;
     public ChainableConversionService(ConversionService fallback) {
         this.fallback = fallback;
