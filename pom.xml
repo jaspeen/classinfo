@@ -7,9 +7,9 @@
     <groupId>org.jeesy</groupId>
     <artifactId>classinfo</artifactId>
     <version>0.5.1-SNAPSHOT</version>
-
+    <name>classinfo</name>
     <description>Tiny java class introspector</description>
-
+    <url>http://github.com/jaspeen/classinfo</url>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -22,6 +22,16 @@
         <connection>scm:git:http://github.com/jaspeen/classinfo.git</connection> 
         <tag>HEAD</tag>
     </scm>
+    <developers>
+        <developer>
+            <name>Artem Mironov</name>
+            <email>jaspeen@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
