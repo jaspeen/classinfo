@@ -15,6 +15,7 @@
  */
 package org.jeesy.classinfo.converter;
 
+import org.jeesy.classinfo.Utils;
 import org.jeesy.classinfo.converter.api.ConversionService;
 import org.jeesy.classinfo.converter.api.Converter;
 
@@ -45,9 +46,9 @@ public class ConverterCache {
                 }
                 converters.put(converterClass, c);
             } catch(InvocationTargetException e) {
-                throw new RuntimeException(e.getTargetException());
+                Utils.uncheckedThrow(e.getTargetException());
             } catch (NoSuchMethodException|IllegalAccessException|InstantiationException e) {
-                throw new RuntimeException();
+                Utils.uncheckedThrow(e);
             }
         }
         return c;

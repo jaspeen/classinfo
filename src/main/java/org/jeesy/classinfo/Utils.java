@@ -19,7 +19,7 @@ package org.jeesy.classinfo;
  *
  * @author Artem Mironov
  */
-class Utils {
+public class Utils {
     private Utils(){}
     @SuppressWarnings("unchecked")
     private static <T extends Throwable> void throwException(Throwable exception, Object dummy) throws T
