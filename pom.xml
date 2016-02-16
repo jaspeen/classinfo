@@ -6,7 +6,7 @@
 
     <groupId>org.jeesy</groupId>
     <artifactId>classinfo</artifactId>
-    <version>0.5.2-SNAPSHOT</version>
+    <version>0.5.3-SNAPSHOT</version>
     <name>classinfo</name>
     <description>Tiny java class introspector</description>
     <url>http://github.com/jaspeen/classinfo</url>
