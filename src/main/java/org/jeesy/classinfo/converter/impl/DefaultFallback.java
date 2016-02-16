@@ -36,6 +36,7 @@ public class DefaultFallback implements ConversionService {
 
     @Override
     public Object convert(Object src, TypeInfo<Object> srcType, TypeInfo<Object> dstType) throws ConversionException {
+        if(src == null) return null; //assume what here we can't deal with null source
         Class<Object> rawType = dstType.getRawType();
         if (srcType.getRawType().equals(rawType)) return src;
         //src is a string
